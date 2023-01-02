@@ -13,20 +13,20 @@ router.get(
   comprobanteController.GetComprobanteById
 );
 
-router.get(
-  "/comprobante-pendiente/:IdUsuario/:IdServicio",
+router.put(
+  "/comprobante-pendiente/:IdUsuario",
   isAuth,
   [param("IdUsuario").isNumeric().isLength({ min: 1 })],
   comprobanteController.GetComprobantePendiente
 );
 
-router.get(
-  "/comprobante-fecha/:FechaInicio/:FechaFin/:IdUsuario/:IdServicio",
+router.put(
+  "/comprobante-fecha/:IdUsuario",
   isAuth,
   [
     param("IdUsuario").isNumeric().isLength({ min: 1 }),
-    param("FechaInicio").isDate(),
-    param("FechaFin").isDate(),
+    body("FechaInicio").isDate(),
+    body("FechaFin").isDate(),
   ],
   comprobanteController.GetComprobanteByFecha
 );

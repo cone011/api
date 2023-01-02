@@ -42,14 +42,14 @@ exports.GetSearchUsuario = async (req, res, next) => {
   }
 };
 
-exports.GetLoginUsuario = async (res, req, next) => {
+exports.GetLoginUsuario = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     ValidationValue(errors);
-    const UserName = req.body.UserName;
+    const Username = req.body.Username;
     const Password = req.body.Password;
 
-    const result = await db.query("CALL pa_GetValidUsuario(?);", [UserName]);
+    const result = await db.query("CALL pa_GetValidUsuario(?);", [Username]);
 
     const sqlResult = { ...result[0][0][0] };
     const response = await bcrypt.compare(Password, sqlResult.Password);

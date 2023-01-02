@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cobranza
 -- ------------------------------------------------------
--- Server version	8.0.28
+-- Server version	8.0.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,6 +27,7 @@ CREATE TABLE `comprobante` (
   `IdServicio` smallint NOT NULL,
   `IdUsuario` bigint NOT NULL,
   `ReferenciaComprobante` varchar(50) NOT NULL,
+  `FacturaComprobante` varchar(45) NOT NULL DEFAULT '',
   `FechaEmision` date NOT NULL,
   `FechaVencimiento` date NOT NULL,
   `MontoDeudaTotal` int NOT NULL,
@@ -37,7 +38,7 @@ CREATE TABLE `comprobante` (
   KEY `FK_COMPROBANTE_SERVICIO_idx` (`IdServicio`),
   CONSTRAINT `FK_COMPROBANTE_SERVICIO` FOREIGN KEY (`IdServicio`) REFERENCES `servicio` (`IdServicio`) ON DELETE CASCADE,
   CONSTRAINT `FK_COMPROBANTE_USUARIO` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +47,7 @@ CREATE TABLE `comprobante` (
 
 LOCK TABLES `comprobante` WRITE;
 /*!40000 ALTER TABLE `comprobante` DISABLE KEYS */;
+INSERT INTO `comprobante` VALUES (1,1,1,'A45614588','001-001-001245','2022-12-30','2023-01-08',0,'PAGADO','2023-01-02 07:29:36'),(2,1,1,'NIS78945641','001-007-001245','2022-12-15','2022-12-31',120000,'PENDIENTE','2023-01-02 07:30:39');
 /*!40000 ALTER TABLE `comprobante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +68,7 @@ CREATE TABLE `comprobantedetalle` (
   PRIMARY KEY (`IdComprobanteDetalle`),
   KEY `FK_COMPROBANTE_DETALLE_idx` (`IdComprabante`),
   CONSTRAINT `FK_COMPROBANTE_DETALLE` FOREIGN KEY (`IdComprabante`) REFERENCES `comprobante` (`IdComprobante`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,6 +77,7 @@ CREATE TABLE `comprobantedetalle` (
 
 LOCK TABLES `comprobantedetalle` WRITE;
 /*!40000 ALTER TABLE `comprobantedetalle` DISABLE KEYS */;
+INSERT INTO `comprobantedetalle` VALUES (1,1,'2023-01-02',750000,750000,0);
 /*!40000 ALTER TABLE `comprobantedetalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +96,7 @@ CREATE TABLE `servicio` (
   PRIMARY KEY (`IdServicio`),
   KEY `FK_SERVICIO_TIPO_idx` (`IdTipo`),
   CONSTRAINT `FK_SERVICIO_TIPO` FOREIGN KEY (`IdTipo`) REFERENCES `tipo` (`IdTipo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +105,7 @@ CREATE TABLE `servicio` (
 
 LOCK TABLES `servicio` WRITE;
 /*!40000 ALTER TABLE `servicio` DISABLE KEYS */;
-INSERT INTO `servicio` VALUES (1,1,'PER','PERSONAL'),(2,1,'TG','TIGO'),(3,1,'CL','CLARO');
+INSERT INTO `servicio` VALUES (1,1,'PER','PERSONAL'),(2,1,'TG','TIGO'),(3,1,'CL','CLARO'),(4,2,'AN','ANDE');
 /*!40000 ALTER TABLE `servicio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -380,7 +383,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_GetEstadoListaComprobantes`(
     IN paIdServicio SMALLINT
 )
 BEGIN
-	SELECT C.FechaEmision, C.FechaVencimiento, C.Referencia, C.FacturaComprobante,
+	SELECT C.FechaEmision, C.FechaVencimiento, C.ReferenciaComprobante, C.FacturaComprobante,
 	CD.FechaPago, CD.MontoAbonado, CD.MontoAbonado, CD.Saldo
 	FROM Comprobante C 
 	JOIN ComprobanteDetalle CD ON C.IdComprobante = CD.IdComprabante
@@ -655,7 +658,7 @@ BEGIN
 	UPDATE Comprobante SET MontoDeudaTotal = paMontoDeuda - paMontoPagar,
 						   Estado = IF(difMonto = 0, 'PAGADO', 'PENDIENTE')
 					WHERE IdComprobante = paIdComprobante;
-	INSERT INTO comprobantedetalle(IdComprobante,FechaPago,MontoDeuda, MontoAbonado,Saldo)
+	INSERT INTO comprobantedetalle(IdComprabante,FechaPago,MontoDeuda, MontoAbonado,Saldo)
     VALUES(paIdComprobante, curdate(), paMontoDeuda, paMontoPagar, difMonto);
 END ;;
 DELIMITER ;
@@ -760,4 +763,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-02  0:08:18
+-- Dump completed on 2023-01-02  8:15:36

@@ -44,7 +44,7 @@ router.post(
 router.post(
   "/login-usuario",
   [
-    body("UserName").trim().isLength({ min: 5 }),
+    body("Username").trim().isLength({ min: 5 }),
     body("Password").trim().isLength({ min: 5 }),
   ],
   usuarioController.GetLoginUsuario

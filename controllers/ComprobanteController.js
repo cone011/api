@@ -34,7 +34,9 @@ exports.GetComprobantePendiente = async (req, res, next) => {
     const errors = validationResult(req);
     ValidationValue(errors);
     const IdUsuario = req.params.IdUsuario;
-    const IdServicio = req.params.IdServicio ? req.params.IdServicio : null;
+    const IdServicio = req.body.param.IdServicio
+      ? req.body.param.IdServicio
+      : null;
     const result = await db.query("CALL pa_GetComprobantesPendientes(?,?);", [
       IdUsuario,
       IdServicio,
@@ -73,10 +75,13 @@ exports.GetComprobanteByFecha = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     ValidationValue(errors);
-    const FechaInicio = req.params.FechaInicio;
-    const FechaFin = req.params.FechaFin;
+    console.log(req.body);
+    const FechaInicio = req.body.param.FechaInicio;
+    const FechaFin = req.body.param.FechaFin;
+    const IdServicio = req.body.param.IdServicio
+      ? req.body.param.IdServicio
+      : null;
     const IdUsuario = req.params.IdUsuario;
-    const IdServicio = req.params.IdServicio ? req.params.IdServicio : null;
     const result = await db.query(
       "CALL pa_GetEstadoListaComprobantes(?,?,?,?);",
       [FechaInicio, FechaFin, IdUsuario, IdServicio]
