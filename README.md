@@ -8,6 +8,9 @@ Utiliza un JWT para realizar algunas consultas
 
 Utiliza validaciones desde los routers hecho en express-validator
 
+Cuenta con un log de todas las llamadas que se hicieron se guarda en el archivo acces.log
+Obs: si no existe acces.log se crea automaticamente para realizar el guardado
+
 El link de la api es http://localhost:9091/api
 
 Para iniciarlo solo deben instalar 
