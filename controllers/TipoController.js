@@ -6,9 +6,9 @@ const db = require("../config/database");
 
 exports.GetAllTipo = async (req, res, next) => {
   try {
-    const result = await db.query("CALL pa_GetAllTipo();", []);
+    const result = await db.query("CALL pa_GetAllTipos();", []);
     ResultNoFound(result);
-    res.status(200).json({ mensaje: "OK", resultado: result });
+    res.status(200).json({ mensaje: "OK", resultado: result[0][0] });
   } catch (err) {
     ErrorHandler(err, next);
   }
@@ -21,7 +21,7 @@ exports.GetTipoById = async (req, res, next) => {
     const IdTipo = req.params.IdTipo;
     const result = await db.query("CALL pa_GetTipoById(?);", [IdTipo]);
     ResultNoFound(result);
-    res.status(200).json({ mensaje: "OK", resultado: result });
+    res.status(200).json({ mensaje: "OK", resultado: result[0][0] });
   } catch (err) {
     ErrorHandler(err, next);
   }
