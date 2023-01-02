@@ -2,6 +2,12 @@
 
 Buenos dias primero les pido disculpas por no cumplir con las normas establecidas 
 
+Esta heco en una base de datos de MySQL y llama procedimientos almacenados para realizar las consultas o procesos
+
+Utiliza un JWT para realizar algunas consultas 
+
+Utiliza validaciones desde los routers hecho en express-validator
+
 El link de la api es http://localhost:9091/api
 
 Para iniciarlo solo deben instalar 
